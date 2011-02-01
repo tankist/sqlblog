@@ -1,0 +1,19 @@
+<div class="post">
+	<h1><?=$this->post['title']?></h1>(<a href="<?=$this->url(array('action' => 'delete', 'id' => $this->post['id']))?>">Delete</a>)|(<a href="<?=$this->url(array('action' => 'edit', 'id' => $this->post['id']))?>">Edit</a>)
+	<p><?=$this->post['text']?></p>
+	<h4>Tags:</h4>
+	<ul><? foreach ($this->tags as $tag) { ?>
+		<li><a href="<?=$this->url(array('controller' => 'tags', 'tag' => $tag['tag']), null, true)?>"><?=$tag['tag']?></a></li>
+	<? }?></ul>
+	<hr>
+	<ul id="comments">
+	<? foreach ($this->comments as $comment) { ?>
+		<li><h4><?=$comment['user']?></h4><span><?=$comment['date']?></span><p><?=$comment['text']?></p></li>
+	<? } ?>
+	</ul>
+	<hr>
+	<div id="commentFormContainer">
+		<p>Leave a comment</p>
+		<?=$this->commentForm?>
+	</div>
+</div>
