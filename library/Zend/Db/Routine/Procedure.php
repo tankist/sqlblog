@@ -49,7 +49,7 @@ class Zend_Db_Routine_Procedure extends Zend_Db_Routine_Abstract {
 					$inputParams[] = $adapter->quote($value);
 					break;
 				case 'INOUT':
-					$predefinedParams[] = 'SET @' . $adapter->quoteIdentifier($paramDefinition['name']) . '=' . $value;
+					$predefinedParams[] = 'SET @' . $adapter->quoteIdentifier($paramDefinition['name']) . '=' . $adapter->quote($value);
 				case 'OUT':
 					$paramName = $adapter->quoteIdentifier($paramDefinition['name']);
 					$inputParams[] = '@' . $paramName;

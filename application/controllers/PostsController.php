@@ -60,7 +60,7 @@ class PostsController extends Zend_Controller_Action
 
 	public function saveAction()
 	{
-		$post_id = $this->_getParam('id');
+		$post_id = (int)$this->_getParam('id');
 		$this->view->form = $form = new Application_Form_Post(array(
 			'name' => 'postForm',
 			'action' => '/posts/save/'
