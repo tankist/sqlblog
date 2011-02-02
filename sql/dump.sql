@@ -27,7 +27,7 @@ CREATE TABLE `sb_posts` (
   `date` datetime DEFAULT NULL,
   `commentsCount` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 #
 # Structure for the `sb_comments` table : 
@@ -44,11 +44,11 @@ CREATE TABLE `sb_comments` (
   PRIMARY KEY (`id`),
   KEY `post_id` (`post_id`),
   CONSTRAINT `sb_comments_fk` FOREIGN KEY (`post_id`) REFERENCES `sb_posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DELIMITER $$
 
-CREATE DEFINER = 'root'@'localhost' TRIGGER `sb_comments_after_ins_tr` AFTER INSERT ON `sb_comments`
+CREATE DEFINER = 'sqlblog'@'localhost' TRIGGER `sb_comments_after_ins_tr` AFTER INSERT ON `sb_comments`
   FOR EACH ROW
 BEGIN
     UPDATE `sb_posts` AS p
@@ -56,7 +56,7 @@ BEGIN
     WHERE p.`id` = NEW . `post_id`;
 END$$
 
-CREATE DEFINER = 'root'@'localhost' TRIGGER `sb_comments_after_del_tr` AFTER DELETE ON `sb_comments`
+CREATE DEFINER = 'sqlblog'@'localhost' TRIGGER `sb_comments_after_del_tr` AFTER DELETE ON `sb_comments`
   FOR EACH ROW
 BEGIN
 	UPDATE `sb_posts` AS p
@@ -78,7 +78,7 @@ CREATE TABLE `sb_tags` (
   `weight` int(3) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `tag` (`tag`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 #
 # Structure for the `sb_post_tags` table : 
@@ -98,7 +98,7 @@ CREATE TABLE `sb_post_tags` (
 
 DELIMITER $$
 
-CREATE DEFINER = 'root'@'localhost' TRIGGER `sb_post_tags_after_ins_tr` AFTER INSERT ON `sb_post_tags`
+CREATE DEFINER = 'sqlblog'@'localhost' TRIGGER `sb_post_tags_after_ins_tr` AFTER INSERT ON `sb_post_tags`
   FOR EACH ROW
 BEGIN
 	UPDATE `sb_tags` AS t
@@ -106,7 +106,7 @@ BEGIN
 	    WHERE t.`id` = NEW.tag_id;
 END$$
 
-CREATE DEFINER = 'root'@'localhost' TRIGGER `sb_post_tags_after_del_tr` AFTER DELETE ON `sb_post_tags`
+CREATE DEFINER = 'sqlblog'@'localhost' TRIGGER `sb_post_tags_after_del_tr` AFTER DELETE ON `sb_post_tags`
   FOR EACH ROW
 BEGIN
 	UPDATE `sb_tags` AS t
@@ -124,7 +124,7 @@ DELIMITER $$
 
 DROP FUNCTION IF EXISTS `Posts_getCount`$$
 
-CREATE DEFINER = 'root'@'localhost' FUNCTION `Posts_getCount`()
+CREATE DEFINER = 'sqlblog'@'localhost' FUNCTION `Posts_getCount`()
     RETURNS int(11)
     NOT DETERMINISTIC
     CONTAINS SQL
@@ -142,7 +142,7 @@ END$$
 
 DROP FUNCTION IF EXISTS `Post_getCommentsCount`$$
 
-CREATE DEFINER = 'root'@'localhost' FUNCTION `Post_getCommentsCount`(
+CREATE DEFINER = 'sqlblog'@'localhost' FUNCTION `Post_getCommentsCount`(
         post_id INTEGER(11)
     )
     RETURNS int(11)
@@ -162,7 +162,7 @@ END$$
 
 DROP FUNCTION IF EXISTS `Post_getTagsCount`$$
 
-CREATE DEFINER = 'root'@'localhost' FUNCTION `Post_getTagsCount`(
+CREATE DEFINER = 'sqlblog'@'localhost' FUNCTION `Post_getTagsCount`(
         post_id INTEGER(11)
     )
     RETURNS tinyint(4)
@@ -182,7 +182,7 @@ END$$
 
 DROP FUNCTION IF EXISTS `Tag_getPostsCount`$$
 
-CREATE DEFINER = 'root'@'localhost' FUNCTION `Tag_getPostsCount`(
+CREATE DEFINER = 'sqlblog'@'localhost' FUNCTION `Tag_getPostsCount`(
         tag VARCHAR(50)
     )
     RETURNS int(11)
@@ -204,7 +204,7 @@ END$$
 
 DROP FUNCTION IF EXISTS `Tag_calculateWeight`$$
 
-CREATE DEFINER = 'root'@'localhost' FUNCTION `Tag_calculateWeight`(
+CREATE DEFINER = 'sqlblog'@'localhost' FUNCTION `Tag_calculateWeight`(
         tag VARCHAR(50)
     )
     RETURNS int(3)
@@ -224,7 +224,7 @@ END$$
 
 DROP FUNCTION IF EXISTS `Tag_getById`$$
 
-CREATE DEFINER = 'root'@'localhost' FUNCTION `Tag_getById`(
+CREATE DEFINER = 'sqlblog'@'localhost' FUNCTION `Tag_getById`(
         tag_id INTEGER(11)
     )
     RETURNS varchar(50) CHARSET utf8
@@ -244,7 +244,7 @@ END$$
 
 DROP FUNCTION IF EXISTS `Tag_getIdByTag`$$
 
-CREATE DEFINER = 'root'@'localhost' FUNCTION `Tag_getIdByTag`(
+CREATE DEFINER = 'sqlblog'@'localhost' FUNCTION `Tag_getIdByTag`(
         tag VARCHAR(50)
     )
     RETURNS int(11)
@@ -264,7 +264,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Comments_getLast`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Comments_getLast`()
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Comments_getLast`()
     NOT DETERMINISTIC
     CONTAINS SQL
     SQL SECURITY DEFINER
@@ -279,7 +279,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Comment_remove`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Comment_remove`(
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Comment_remove`(
         IN comment_id INTEGER(11)
     )
     NOT DETERMINISTIC
@@ -296,7 +296,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Posts_getById`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Posts_getById`(
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Posts_getById`(
         IN post_id INTEGER(11)
     )
     NOT DETERMINISTIC
@@ -313,7 +313,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Posts_save`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Posts_save`(
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Posts_save`(
         IN title VARCHAR(100),
         IN text TEXT,
         INOUT post_id INTEGER(11)
@@ -323,7 +323,7 @@ CREATE DEFINER = 'root'@'localhost' PROCEDURE `Posts_save`(
     SQL SECURITY DEFINER
     COMMENT ''
 BEGIN
-	IF ISNULL(`post_id`) THEN
+	IF ISNULL(`post_id`) OR `post_id` = 0 THEN
     	INSERT INTO `sb_posts` (`title`, `text`, `date`) 
     		VALUES (`title`, `text`, NOW());
         SET `post_id` = LAST_INSERT_ID();
@@ -340,7 +340,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Post_addComment`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Post_addComment`(
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Post_addComment`(
         IN post_id INTEGER(11),
         IN user VARCHAR(50),
         IN text TEXT,
@@ -362,7 +362,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Tags_save`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Tags_save`(
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Tags_save`(
         IN tag VARCHAR(50),
         INOUT tag_id INTEGER(11)
     )
@@ -371,7 +371,7 @@ CREATE DEFINER = 'root'@'localhost' PROCEDURE `Tags_save`(
     SQL SECURITY DEFINER
     COMMENT ''
 BEGIN
-	IF ISNULL(`tag_id`) THEN
+	IF ISNULL(`tag_id`) OR `tag_id` = 0 THEN
     	INSERT INTO `sb_tags` (`tag`) 
     		VALUES (`tag`);
         SET `tag_id` = LAST_INSERT_ID();
@@ -388,7 +388,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Post_addTag`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Post_addTag`(
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Post_addTag`(
         IN post_id INTEGER(11),
         IN tag VARCHAR(100)
     )
@@ -399,7 +399,7 @@ CREATE DEFINER = 'root'@'localhost' PROCEDURE `Post_addTag`(
 BEGIN
 	DECLARE `tag_id` INT(11);
 	SELECT `t`.`id` INTO `tag_id` FROM `sb_tags` AS t WHERE t.`tag` = `tag`;
-    IF ISNULL(`tag_id`) THEN
+    IF ISNULL(`tag_id`) OR `tag_id` = 0 THEN
     	CALL `Tags_save`(`tag`, `tag_id`);
     END IF;
     INSERT IGNORE INTO `sb_post_tags` (`post_id`, `tag_id`)
@@ -412,7 +412,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Post_clearTags`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Post_clearTags`(
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Post_clearTags`(
         IN post_id INTEGER(11)
     )
     NOT DETERMINISTIC
@@ -429,7 +429,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Post_getComments`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Post_getComments`(
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Post_getComments`(
         IN post_id INTEGER(11)
     )
     NOT DETERMINISTIC
@@ -446,7 +446,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Post_getTags`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Post_getTags`(
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Post_getTags`(
         IN post_id INTEGER(11)
     )
     NOT DETERMINISTIC
@@ -463,7 +463,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Post_remove`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Post_remove`(
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Post_remove`(
         IN post_id INTEGER(11)
     )
     NOT DETERMINISTIC
@@ -480,7 +480,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Tag_getPosts`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Tag_getPosts`(
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Tag_getPosts`(
         IN tag VARCHAR(50)
     )
     NOT DETERMINISTIC
@@ -500,7 +500,7 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Tag_remove`$$
 
-CREATE DEFINER = 'root'@'localhost' PROCEDURE `Tag_remove`(
+CREATE DEFINER = 'sqlblog'@'localhost' PROCEDURE `Tag_remove`(
         IN tag_id INTEGER(11)
     )
     NOT DETERMINISTIC
