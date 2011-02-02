@@ -9,8 +9,8 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP DATABASE IF EXISTS `sqlblog`;
 
 CREATE DATABASE `sqlblog`
-    CHARACTER SET 'cp1251'
-    COLLATE 'cp1251_general_ci';
+    CHARACTER SET 'utf8'
+    COLLATE 'utf8_general_ci';
 
 USE `sqlblog`;
 
@@ -27,7 +27,7 @@ CREATE TABLE `sb_posts` (
   `date` datetime DEFAULT NULL,
   `commentsCount` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=cp1251;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 #
 # Structure for the `sb_comments` table : 
@@ -44,7 +44,7 @@ CREATE TABLE `sb_comments` (
   PRIMARY KEY (`id`),
   KEY `post_id` (`post_id`),
   CONSTRAINT `sb_comments_fk` FOREIGN KEY (`post_id`) REFERENCES `sb_posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=cp1251;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 DELIMITER $$
 
@@ -78,7 +78,7 @@ CREATE TABLE `sb_tags` (
   `weight` int(3) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `tag` (`tag`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=cp1251;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 #
 # Structure for the `sb_post_tags` table : 
@@ -94,7 +94,7 @@ CREATE TABLE `sb_post_tags` (
   KEY `post_id` (`post_id`),
   CONSTRAINT `sb_post_tags_fk` FOREIGN KEY (`tag_id`) REFERENCES `sb_tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `sb_post_tags_fk1` FOREIGN KEY (`post_id`) REFERENCES `sb_posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=cp1251;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DELIMITER $$
 
@@ -227,7 +227,7 @@ DROP FUNCTION IF EXISTS `Tag_getById`$$
 CREATE DEFINER = 'root'@'localhost' FUNCTION `Tag_getById`(
         tag_id INTEGER(11)
     )
-    RETURNS varchar(50) CHARSET cp1251
+    RETURNS varchar(50) CHARSET utf8
     NOT DETERMINISTIC
     CONTAINS SQL
     SQL SECURITY DEFINER
