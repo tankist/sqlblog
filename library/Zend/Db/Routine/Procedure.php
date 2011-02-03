@@ -1,5 +1,7 @@
 <?php
 class Zend_Db_Routine_Procedure extends Zend_Db_Routine_Abstract {
+
+	protected $_isDatasetReturned = false;
 	
 	public function describe($name) {
 		$create = $this->getAdapter()->fetchRow('SHOW CREATE PROCEDURE ' . $this->_db->quoteIdentifier($name));
@@ -62,7 +64,13 @@ class Zend_Db_Routine_Procedure extends Zend_Db_Routine_Abstract {
 			if (!empty($predefinedParams)) {
 				$adapter->query(join(', ', $predefinedParams));
 			}
-			$result['rows'] = $adapter->fetchAssoc('CALL ' . $adapter->quoteIdentifier($name) . '(' . join(', ', $inputParams) . ')');
+			$routineCall = 'CALL ' . $adapter->quoteIdentifier($name) . '(' . join(', ', $inputParams) . ')';
+			if ($this->_isDatasetReturned) {
+				$result['rows'] = $adapter->fetchAssoc($routineCall);
+			}
+			else {
+				$adapter->query($routineCall);
+			}
 			if (!empty($outputParams)) {
 				$result['outputParams'] = $adapter->fetchRow('SELECT ' . join(', ', $outputParams));
 			}
@@ -74,6 +82,11 @@ class Zend_Db_Routine_Procedure extends Zend_Db_Routine_Abstract {
 		}
 		return $result;
 	}
-	
+
+	public function setIsDatasetReturned($_isDatasetReturned) {
+		$this->_isDatasetReturned = $_isDatasetReturned;
+		return $this;
+	}
+
+
 }
-?>

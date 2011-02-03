@@ -38,10 +38,10 @@ class PostsController extends Zend_Controller_Action
 			'action' => '/posts/save/'
 		));
 		
-		$result = $this->_helper->procedure()->Posts_getById($post_id);
+		$result = $this->_helper->procedure()->setIsDatasetReturned(true)->Posts_getById($post_id);
 		if (!empty($result['rows'])) {
 			$postData = $result['rows'][$post_id];
-			$tagsRowset = $this->_helper->procedure()->Post_getTags($post_id);
+			$tagsRowset = $this->_helper->procedure()->setIsDatasetReturned(true)->Post_getTags($post_id);
 			if (!empty($tagsRowset)) {
 				$tags = array();
 				foreach ($tagsRowset['rows'] as $_t) {
@@ -72,6 +72,9 @@ class PostsController extends Zend_Controller_Action
 					$form->getValue('text'),
 					$post_id
 				);
+				if ($result['outputParams']) {
+					$post_id = (int)$result['outputParams']['post_id'];
+				}
 				if ($post_id) {
 					$tags = $form->getValue('tags');
 					$tags = explode(',', $tags);
@@ -127,15 +130,15 @@ class PostsController extends Zend_Controller_Action
 		if (!$post_id) {
 			$this->_redirect('/posts');
 		}
-		$result = $this->_helper->procedure()->Posts_getById($post_id);
+		$result = $this->_helper->procedure()->setIsDatasetReturned(true)->Posts_getById($post_id);
 		if (!$result) {
 			$this->_redirect('/posts');
 		}
 		$this->view->post = $result['rows'][$post_id];
-		$tags = $this->_helper->procedure()->Post_getTags($post_id);
+		$tags = $this->_helper->procedure()->setIsDatasetReturned(true)->Post_getTags($post_id);
 		$this->view->tags = ($tags)?$tags['rows']:array();
 		
-		$commentsResultset = $this->_helper->procedure()->Post_getComments($post_id);
+		$commentsResultset = $this->_helper->procedure()->setIsDatasetReturned(true)->Post_getComments($post_id);
 		$this->view->comments = (!empty($commentsResultset))?$commentsResultset['rows']:array();
 		
 		$commentForm = new Application_Form_Comment(array(
