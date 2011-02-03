@@ -2,6 +2,12 @@
 <div class="post">
 	<h1><a href="<?=$this->url(array('controller' => 'posts', 'action' => 'view', 'id' => $post->id))?>"><?=$post->title?></a></h1>(<?=$post->commentsCount?> comments)(<a href="<?=$this->url(array('controller' => 'posts', 'action' => 'delete', 'id' => $post->id))?>">Delete</a>)|(<a href="<?=$this->url(array('controller' => 'posts', 'action' => 'edit', 'id' => $post->id))?>">Edit</a>)
 	<p><?=$post->text?></p>
+	<? if (count($post->getTags()) > 0) { ?><h4>Tags:</h4>
+	<ul class="tags">
+		<? foreach ($post->getTags() as $tag) { ?>
+		<li><a href="<?=$this->url(array('controller' => 'tags', 'action' => 'index', 'tag' => $tag->tag), null, true)?>"><?=$tag->tag?></a></li>
+		<? }?>
+	</ul><? } ?>
 </div>
 <hr>
 <?  } ?>

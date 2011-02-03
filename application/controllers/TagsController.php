@@ -25,7 +25,8 @@ class TagsController extends Zend_Controller_Action
 					array('pt' => $postTagsTable->info(Application_Model_DbTable_PostTags::NAME)), 
 					'pt.post_id = id'
 				)
-				->where('pt.tag_id = ?', $tag_id)
+				->where('pt.tag_id = ?', $tag_id),
+				'Posts'
 		);
 		$paginator->setItemCountPerPage(10)->setCurrentPageNumber($page);
 		$this->view->postsPaginator = $paginator;
