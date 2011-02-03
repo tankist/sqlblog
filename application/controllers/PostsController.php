@@ -13,7 +13,7 @@ class PostsController extends Zend_Controller_Action
 	{
 		$page = $this->_getParam('p', 1);
 		$postsTable = new Application_Model_DbTable_Posts();
-		$paginator = Zend_Paginator::factory($postsTable->select());
+		$paginator = Zend_Paginator::factory($postsTable->select(), 'Posts');
 		$paginator->setItemCountPerPage(10)->setCurrentPageNumber($page);
 		$this->view->postsPaginator = $paginator;
 	}
